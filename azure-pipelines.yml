@@ -1,15 +1,29 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+- main  # Assuming your main branch is named 'main'
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'  # Choose an appropriate image
 
 steps:
-- script: echo Hello, world!
-  displayName: 'hello world'
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
 
+- script: |
+    # Install SSH client
+    sudo apt update -y
+    sudo apt install openssh-client -y
+    
+    # Set up SSH private key
+    echo "$SSH_PRIVATE_KEY" > ssh_key
+    chmod 600 ssh_key
+    
+    # SSH into the VM and execute commands
+    ssh -i ssh_key azureuser@52.172.88.62 "sudo apt update -y && sudo apt install apache2 -y && sudo systemctl start apache2 && sudo bash -c 'echo your first web server > /var/www/html/index.html'"
+  displayName: 'SSH into VM and execute commands'
+
+# Clean up the SSH key
+- script: |
+    rm ssh_key
+  displayName: 'Clean up SSH Key'
