@@ -1,0 +1,20 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+    architecture: 'x64'
+
+- script: |
+    # Install sshpass to provide the password in the script
+    sudo apt-get install -y sshpass
+
+    # SSH into the VM with the username and password
+    sshpass -p 'MaYuR@940206' ssh akash@20.235.54.80 "sudo apt update -y && sudo apt install apache2 -y && sudo systemctl start apache2 && sudo bash -c 'echo your first web server > /var/www/html/index.html'"
+  displayName: 'SSH into VM'
