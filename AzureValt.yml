@@ -1,0 +1,22 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+
+- script: |
+    # Retrieve the private key from Azure Key Vault
+    PRIVATE_KEY=$(az keyvault secret show --name "AKsecrete" --vault-name "AKvalt1" --query "value" --output tsv)
+
+    # Set the private key as an environment variable
+    echo "$PRIVATE_KEY" > $HOME/private-key.pem
+    chmod 600 $HOME/private-key.pem
+
+    # SSH into your Azure VM
+    ssh -i $HOME/private-key.pem azureuser@20.51.239.20 "sudo apt update -y && sudo apt install apache2 -y && sudo systemctl start apache2 && sudo bash -c 'echo your first web server > /var/www/html/index.html'"
+  displayName: 'SSH into Azure VM'
