@@ -16,7 +16,7 @@ steps:
     sudo apt install openssh-client -y
     
     # Set up SSH private key
-    echo "$SSH_PRIVATE_KEY" > ssh_key
+    echo "$secretes.SSH_PRIVATE_KEY" > ssh_key
     chmod 400 ssh_key
     
     # SSH into the VM and execute commands with host key checking disabled
