@@ -12,13 +12,11 @@ steps:
     architecture: 'x64'
 
 - script: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -t rsa 20.102.109.45 >> ~/.ssh/known_hosts
-        
+    mkdir -p ~/.ssh
+    echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+    chmod 600 ~/.ssh/id_rsa
+    ssh-keyscan -t rsa 20.102.109.45 >> ~/.ssh/known_hosts
 
-   
     # SSH into the VM
     ssh -i ~/.ssh/id_rsa azureuser@20.102.109.45 "sudo apt update -y && sudo apt install apache2 -y && sudo systemctl start apache2 && sudo bash -c 'echo your first web server > /var/www/html/index.html'"
   displayName: 'SSH into VM'
