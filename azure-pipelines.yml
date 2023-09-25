@@ -16,7 +16,7 @@ steps:
     sudo apt install openssh-client -y
     
     # Set up SSH private key
-    echo "$SSH_PRIVATE_KEY" > ssh_key
+    echo "$secrets.SSH_PRIVATE_KEY" > ssh_key
     chmod 600 ssh_key
     
     # SSH into the VM and execute commands
