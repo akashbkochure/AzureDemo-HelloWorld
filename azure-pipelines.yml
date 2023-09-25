@@ -16,8 +16,8 @@ steps:
     sudo apt install openssh-client -y
     
     # Set up SSH private key
-    echo "$secrets.SSH_PRIVATE_KEY" > ssh_key
-    chmod 600 ssh_key
+    echo "$SSH_PRIVATE_KEY" > ssh_key
+    chmod 400 ssh_key
     
     # SSH into the VM and execute commands with host key checking disabled
     ssh -i ssh_key -o StrictHostKeyChecking=no azureuser@20.102.109.45 "sudo apt update -y && sudo apt install apache2 -y && sudo systemctl start apache2 && sudo bash -c 'echo your first web server > /var/www/html/index.html'"
