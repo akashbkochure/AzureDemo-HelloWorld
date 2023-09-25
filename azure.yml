@@ -6,11 +6,6 @@ pool:
 
 steps:
 - task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.x'
-    addToPath: true
-    architecture: 'x64'
-
 - script: |
     # Install sshpass to provide the password in the script
     sudo apt-get install -y sshpass
