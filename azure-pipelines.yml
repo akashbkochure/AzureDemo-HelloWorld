@@ -12,16 +12,13 @@ steps:
     architecture: 'x64'
 
 - script: |
-    # Create a directory to store the SSH key
-    mkdir -p ~/.ssh
-    echo -n $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
-    chmod 600 ~/.ssh/id_rsa
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -t rsa 20.102.109.45 >> ~/.ssh/known_hosts
+        
 
-    # Add the target VM's SSH host key to known_hosts
-    ssh-keyscan -H 20.102.109.45 >> ~/.ssh/known_hosts
-
+   
     # SSH into the VM
     ssh -i ~/.ssh/id_rsa azureuser@20.102.109.45 "sudo apt update -y && sudo apt install apache2 -y && sudo systemctl start apache2 && sudo bash -c 'echo your first web server > /var/www/html/index.html'"
   displayName: 'SSH into VM'
-  env:
-    SSH_PRIVATE_KEY: $(SSH_PRIVATE_KEY) # Reference the GitHub secret where your private key is stored
